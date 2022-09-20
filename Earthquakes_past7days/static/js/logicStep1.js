@@ -23,34 +23,35 @@ let baseMaps = {
 
 // Create the map object with center, zoom level and default layer.
 let map = L.map('mapid', {
-    center: [43.7, -79.3],
-    zoom: 11,
+    center: [39.5, -98.5],
+    zoom: 3,
     layers: [streets]
 });
 // Pass map layers into our layer control and add the layer control to the map.
 L.control.layers(baseMaps).addTo(map);
 
 // Accessing the Toronto neighborhoods GeoJSON URL.
-let torontoHoods = "https://raw.githubusercontent.com/Kelfang/Mapping_Earthquakes/main/torontoNeighborhoods.json";
+//let torontoHoods = "https://raw.githubusercontent.com/Kelfang/Mapping_Earthquakes/main/torontoNeighborhoods.json";
 
 // Create a style for the lines.
-let hoodStyle = {
-    color: "#0000FF",
-    weight: 1,
-    fillColor: "#ffff00",
-    opacity: 0.2
-}
+//let hoodStyle = {
+  //  color: "#0000FF",
+  //  weight: 1,
+  //  fillColor: "#ffff00",
+  //  opacity: 0.2
+//}
 
 // Getting the GeoJSON data.
-d3.json(torontoHoods).then(function(data){
-    console.log(data);
-    L.geoJSON(data, {
-        style: hoodStyle,
-        onEachFeature: function(feature, layer){
-            layer.bindPopup("<h2>" + "Neighborhood: " + feature.properties.AREA_NAME + "</h2>");
-        }
-    }).addTo(map);
-})
+d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data){
+    L.geoJSON(data).addTo(map);
+});
+//     L.geoJSON(data, {
+//         style: hoodStyle,
+//         onEachFeature: function(feature, layer){
+//             layer.bindPopup("<h2>" + "Neighborhood: " + feature.properties.AREA_NAME + "</h2>");
+//         }
+//     }).addTo(map);
+// })
 
 
 
