@@ -30,10 +30,46 @@ let map = L.map('mapid', {
 // Pass map layers into our layer control and add the layer control to the map.
 L.control.layers(baseMaps).addTo(map);
 
+// Accessing the Toronto neighborhoods GeoJSON URL.
+//let torontoHoods = "https://raw.githubusercontent.com/Kelfang/Mapping_Earthquakes/main/torontoNeighborhoods.json";
+
+// Create a style for the lines.
+//let myStyle = {
+  //  color: "#0000FF",
+  //  weight: 1,
+  //  fillColor: "#ffff00",
+  //  opacity: 0.2
+//}
+
 // Getting the GeoJSON data.
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data){
-    L.geoJSON(data).addTo(map);
+    function styleInfo(feature) {
+        return {
+            opacity: 1,
+            fillOpacity: 1,
+            fillColor: "#ffae42",
+            color: "#000000",
+            radius: getRadius(feature.properties.mag),
+            stroke: true,
+            weight: 0.5
+        };
+    }
+    // Create function to determine the radius of earthquake markers based on magnitude.
+    // Earthquakes with a magnitude of 0 will be plotted with a radius of 1.
+    function getRadius(magnitude){
+        if (magnitude === 0) {
+            return 1;
+        }
+        return magnitude * 4;
+    };
+    // Create a GeoJSON layer with the retrieved data.
+    L.geoJSON(data, {
+    // Turn each feature into a circleMarker on the map.
+        pointToLayer: function(feature, latlng){
+        console.log(data);
+        return L.circleMarker(latlng);
+    },
+    // Set the style for each circleMarker using our styleInfo function.
+        style: styleInfo
+        }).addTo(map);
 });
-
-        
-
